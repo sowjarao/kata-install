@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kata-install
+spec:
+  selector:
+    matchLabels:
+      job: kata-install
+  template:
+    metadata:
+      labels:
+        job: kata-install
+    spec:
+      hostPID: true
+      containers:
+      - name: kata-install
+        image: sowjarao/kata-install
+        securityContext:
+          privileged: true
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: install
+          mountPath: /host
+      volumes:
+      - name: install
+        hostPath:
+          path: /tmp/install
